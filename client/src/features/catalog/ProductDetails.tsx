@@ -5,6 +5,7 @@ import { Product } from "../../app/models/product";
 import axios from "axios";
 import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function ProductDetails() {
     const { id } = useParams<{ id: string }>();
@@ -19,7 +20,7 @@ export default function ProductDetails() {
     }, [id])
 
     
-    if (loading) return (<h3>Loading...</h3>)
+    if (loading) return (<LoadingComponent message="Loading Product..."/>)
     if (!product) return (
         <>
         <NotFound/>

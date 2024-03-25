@@ -1,7 +1,9 @@
 using API.Data;
 using API.DTOs;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -25,8 +27,17 @@ namespace API.Controllers
             return new BasketDto{
                 Id = basket.Id,
                 BuyerId = basket.BuyerId,
-                Items = basket.Items.Select(Ite)
-            }
+                Items = basket.Items.Select(item => new BasketItemDto {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    PictureUrl = item.Product.PictureUrl,
+                    Brand = item.Product.Brand,
+                    Type = item.Product.Type,
+                    Quantity= item.Quantity
+
+            }).ToList()
+            };
         }
 
         [HttpPost]
@@ -54,7 +65,12 @@ namespace API.Controllers
         [HttpDelete]
         public async Task<ActionResult> RemoveBasketItem(int quantity, int productId)
         {
-            return Ok();
+            var basket = await RetrieveBasket();
+            if(basket == null) return NotFound();
+            basket.RemoveItem(productId, quantity);
+            var result = await _context.SaveChangesAsync() > 0;
+            if(result) return Ok();
+            return BadRequest(new ProblemDetails{Title = "Problem deleting item from basket"}); 
         }
 
         private async Task<Basket> RetrieveBasket()

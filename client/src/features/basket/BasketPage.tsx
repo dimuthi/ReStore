@@ -1,23 +1,21 @@
-import { useEffect, useState } from "react"
-import { Basket } from "../../app/models/basket";
-import LoadingComponent from "../../app/layout/LoadingComponent";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import agent from "../../app/api/agent";
 import { Delete } from "@mui/icons-material";
+import { useStoreContext } from "../../app/context/StoreContext";
 
 export default function BasketPage() {
 
-    const [basket, setBasket] = useState<Basket | null>(null);
-    const [loading, setLoading] = useState(true);
+    // const [basket, setBasket] = useState<Basket | null>(null);
+    // const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        agent.basket.getBasket()
-            .then(basket => setBasket(basket))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false))
-    }, []);
+    // useEffect(() => {
+    //     agent.basket.getBasket()
+    //         .then(basket => setBasket(basket))
+    //         .catch(error => console.log(error))
+    //         .finally(() => setLoading(false))
+    // }, []);
 
-    if (loading) return <LoadingComponent message="Loading Basket..." />
+    // if (loading) return <LoadingComponent message="Loading Basket..." />
+    const{basket} = useStoreContext();
     if (!basket) return <Typography variant="h3">Your Basket is Empty</Typography>
 
     return (
@@ -44,7 +42,7 @@ export default function BasketPage() {
                                 <TableCell align="right">{item.quantity}</TableCell>
                                 <TableCell align="right">${((item.quantity * item.price)/100).toFixed(2)}</TableCell>
                                 <TableCell align="right">
-                                    <IconButton color="error" component={Link} to='basket'>
+                                    <IconButton color="error">
                                         <Delete />
                                     </IconButton>
                                 </TableCell>

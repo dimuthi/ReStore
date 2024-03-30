@@ -1,9 +1,7 @@
 using API.Data;
 using API.DTOs;
 using API.Entities;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR.Protocol;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -46,7 +44,6 @@ namespace API.Controllers
             if (result) return CreatedAtRoute("GetBasket", MapBasketToDto(basket));
 
             return BadRequest(new ProblemDetails { Title = "Problem saving item to basket" });
-
         }
 
         [HttpDelete]

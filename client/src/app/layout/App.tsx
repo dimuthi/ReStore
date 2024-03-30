@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import agent from "../api/agent";
 import { useStoreContext } from "../context/StoreContext";
 import { getCookie } from "../util/util";
-import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 // const products = [
 //   {name:'product1', price:100.00},
@@ -18,6 +18,8 @@ function App() {
   //   {name:'product1', price:100.00},
   //   {name:'product2', price:200.00}
   // ])
+
+
   const {setBasket} = useStoreContext();
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,9 @@ function App() {
       agent.basket.getBasket()
       .then(basket => setBasket(basket))
       .catch(error => console.log(error))
-      .finally(() => setLoading(false))
+      .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, [setBasket])
 

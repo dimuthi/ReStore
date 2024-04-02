@@ -5,6 +5,7 @@ import agent from "../../app/api/agent";
 import { LoadingButton } from "@mui/lab";
 import { useState } from "react";
 import BasketSummary from "./BasketSummary";
+import { currencyForamt } from "../../app/util/util";
 
 export default function BasketPage() {
 
@@ -67,7 +68,7 @@ export default function BasketPage() {
                                     <span>{item.name}</span>
                                 </Box>
 
-                                <TableCell align="right">${(item.price / 100).toFixed(2)}</TableCell>
+                                <TableCell align="right">{currencyForamt(item.price)}</TableCell>
                                 <TableCell align="center">
                                     <LoadingButton loading={status.loading && status.name === 'rem' + item.productId} color="error" onClick={() => handleRemoveItem(item.productId, 1, 'rem' + item.productId)}>
                                         <Remove />

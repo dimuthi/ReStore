@@ -1,28 +1,50 @@
-import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../../app/models/product";
 import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
+import { useStoreContext } from "../../app/context/StoreContext";
+import { LoadingButton } from "@mui/lab";
 
 export default function ProductDetails() {
+    const { basket } = useStoreContext();
     const { id } = useParams<{ id: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
+    const [quantity, setQuantity] = useState(0);
+    const [sumbitting, setSubmitting] = useState(false);
+    const item = basket?.items.find(item => item.productId === product?.id);
+
+    function handleInputChange(event: any) {
+        if(event.target.value > 0){
+            setQuantity(parseInt(event.target.value));
+        }
+        
+    }
+
+    function handleUpdateQuantity(){
+        if(item) {
+            basket.it
+        }     
+    }
 
     useEffect(() => {
-       id && agent.catalog.details(parseInt(id))
+        if (item) {
+            setQuantity(item.quantity)
+        }
+        id && agent.catalog.details(parseInt(id))
             .then(response => setProduct(response))
             .catch(error => console.log(error.response))
             .finally(() => setLoading(false));
-    }, [id])
+    }, [id, item])
 
-    
-    if (loading) return (<LoadingComponent message="Loading Product..."/>)
+
+    if (loading) return (<LoadingComponent message="Loading Product..." />)
     if (!product) return (
         <>
-        <NotFound/>
+            <NotFound />
         </>
     )
 
@@ -61,6 +83,29 @@ export default function ProductDetails() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Grid container spacing={2}>
+                    <Grid item xs={6} >
+                        <TextField
+                            onChange={handleInputChange}
+                            variant="outlined"
+                            type="number"
+                            label="Quantity in cart"
+                            fullWidth
+                            value={quantity}
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <LoadingButton
+                            color="primary"
+                            sx={{ height: '55px' }}
+                            size="large"
+                            variant="contained"
+                            fullWidth
+                        >
+                            {item ? 'Update Quantity' : 'Add to Cart'}
+                        </LoadingButton>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     )

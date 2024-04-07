@@ -9,7 +9,7 @@ export default function ContactPage() {
 
     return (
         <>
-            <Typography variant="h2">
+            <Typography variant="h1">
                 {title}
             </Typography>
             <Typography variant="h5">

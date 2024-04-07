@@ -27,7 +27,7 @@ export default function BasketPage() {
         name: ''
     });
 
-    if (!basket) return <Typography variant="h3">Your Basket is Empty</Typography>
+    if (!basket) return <Typography variant="h2">Your Basket is Empty</Typography>
 
     function handleAddItem(productId: number, name: string) {
         setStatus({ loading: true, name: name });

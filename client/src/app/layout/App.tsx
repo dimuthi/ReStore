@@ -5,9 +5,10 @@ import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import agent from "../api/agent";
-import { useStoreContext } from "../context/StoreContext";
 import { getCookie } from "../util/util";
 import LoadingComponent from "./LoadingComponent";
+import { useAppDispatch } from "../store/configureStore";
+import { setBasket } from "../../features/basket/basketSlice";
 // const products = [
 //   {name:'product1', price:100.00},
 //   {name:'product2', price:200.00}
@@ -20,7 +21,8 @@ function App() {
   // ])
 
 
-  const {setBasket} = useStoreContext();
+  // const {setBasket} = useStoreContext();
+  const dispatch = useAppDispatch()
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -28,13 +30,13 @@ function App() {
     const buyerId = getCookie('buyerId');
     if(buyerId) {
       agent.basket.getBasket()
-      .then(basket => setBasket(basket))
+      .then(basket => dispatch(setBasket(basket)))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, [setBasket])
+  }, [dispatch])
 
   const palettype = darkMode ? 'dark' : 'light';
 
